@@ -1,34 +1,117 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.example.chat.app.back.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
-//@Entity
-//@Table(name="usuario")
+@Entity
+@Table(name="usuario")
 public class Chat {
 
-    //@Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idChat;
-
-    private String nombreChat;
-
-    private String tipo;
-
-//    @ManyToMany(fetch=FetchType.Lazy)
-//    @JoinTable(name = "chat_usuario", joinColumns = @JoinColumn(name = "id_usuario", referencedColumnName = "idUsuario"),
-//            inverseJoinColumns = @JoinColumn(name = "id_chat", referencedColumnName = "idChat"),
-//            uniqueConstraints = {
-//                @UniqueConstraint(columnNames = {"id_usuario", "id_rol"})})
-    private List<Usuario> listaUsuarios;
     
+
+    @Size(min = 3, max= 25, message="EL NOMBRE DEL CHAT DEBE TENER COMO MINIMO 3 CARACTERES Y COMO MAXIMO 25")
+    @Column(name="nombre", nullable = true,length = 25)
+    private String nombre;
+
+    @ManyToOne
+    @JoinColumn(name="id_tipo_chat",foreignKey = @ForeignKey(name="fk_chat_tipo_chat"))
+    private TipoChat tipoChat;
     
+    @JsonSerialize(using = ToStringSerializer.class)
+    private LocalDateTime fechaCreacion;
     
-//    @OneToMany(mappedBy="chat",cascade=CascadeType.ALL,fetch=FetchType.EAGER, orphanremoval=true);
+    @JsonIgnoreProperties(value = {"chat", "hibernateLazyInitializer", "handler"})
+    @OneToMany(mappedBy="chat",cascade=CascadeType.ALL,
+            fetch=FetchType.EAGER, orphanRemoval=true)
     private List<Mensaje> listaMensajes;
+    
+    public Long getIdChat() {
+        return idChat;
+    }
+
+    public void setIdChat(Long idChat) {
+        this.idChat = idChat;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public TipoChat getTipoChat() {
+        return tipoChat;
+    }
+
+    public void setTipoChat(TipoChat tipoChat) {
+        this.tipoChat = tipoChat;
+    }
+
+    public LocalDateTime getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(LocalDateTime fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    public List<Mensaje> getListaMensajes() {
+        return listaMensajes;
+    }
+
+    public void setListaMensajes(List<Mensaje> listaMensajes) {
+        this.listaMensajes = listaMensajes;
+    }
+
+    
+    
+    
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 41 * hash + Objects.hashCode(this.idChat);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Chat other = (Chat) obj;
+        if (!Objects.equals(this.idChat, other.idChat)) {
+            return false;
+        }
+        return true;
+    }
     
     
     

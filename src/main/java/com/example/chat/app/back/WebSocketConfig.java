@@ -16,7 +16,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        //http::/localhost:8080/broker
         registry.addEndpoint("/broker") //esta ruta es la que se usara en angular para conectarnos desde angular
                 .setAllowedOrigins("http://localhost:4200")
                 .withSockJS(); //para no usar el sock nativo del html:5, ya que ese no soporta https si no ws
