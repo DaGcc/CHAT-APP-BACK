@@ -28,13 +28,16 @@ public class Usuario implements Serializable {
     @Column(name = "color", nullable = true, length = 15)
     private String color;
 
+    @Column(name = "rutaFoto", nullable = true)
+    private String rutaFoto;
+    
     @NotNull
     @Email(message = "INGRESE UN CORREO ELECTRÓNICO VALIDO")
     @Size(min = 4, max = 120, message = "EL CORREO ELECTRONICO DEBE CONTENER COMO MINIMO 4 CARACTERES Y UN MAXIMO DE 120")
     @Column(name = "email", nullable = false, unique = true, length = 120)
     private String email;
 
-    @NotNull
+    
     @Size(min = 8, max = 8, message = "EL DNI DEBE CONTENER COMO MINIMO Y MAXIMO 8 CARACTERES")
     @Column(name = "dni", nullable = false, unique = true, length = 8)
     private String dni;
@@ -47,14 +50,18 @@ public class Usuario implements Serializable {
     public Usuario() {
     }
 
-    public Usuario(Long idUsuario, String username, String color, String email, String dni, String password) {
+    public Usuario(Long idUsuario, String username, String color, String rutaFoto, String email, String dni, String password) {
         this.idUsuario = idUsuario;
         this.username = username;
         this.color = color;
+        this.rutaFoto = rutaFoto;
         this.email = email;
         this.dni = dni;
         this.password = password;
     }
+
+
+    
 
     /*METODOS GET Y SET*/
     public Long getIdUsuario() {
@@ -105,6 +112,17 @@ public class Usuario implements Serializable {
         this.password = password;
     }
 
+    public String getRutaFoto() {
+        return rutaFoto;
+    }
+
+    public void setRutaFoto(String rutaFoto) {
+        this.rutaFoto = rutaFoto;
+    }
+
+    
+    
+    
     /*PARA COMPARAR OBJS DE LA MISMA CLASE*/
     @Override
     public int hashCode() {

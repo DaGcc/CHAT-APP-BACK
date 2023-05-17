@@ -10,7 +10,6 @@ public class ChatUsuarioDTO {
     
     private Usuario usuario;
     
-   
     private String scopeUser;
     
     @JsonSerialize(using = ToStringSerializer.class)

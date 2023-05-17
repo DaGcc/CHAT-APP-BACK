@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -21,30 +22,33 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name="usuario")
+@Table(name = "chat")
 public class Chat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idChat;
-    
 
-    @Size(min = 3, max= 25, message="EL NOMBRE DEL CHAT DEBE TENER COMO MINIMO 3 CARACTERES Y COMO MAXIMO 25")
-    @Column(name="nombre", nullable = true,length = 25)
+    @Size(min = 3, max = 60, message = "EL NOMBRE DEL CHAT DEBE TENER COMO MINIMO 3 CARACTERES Y COMO MAXIMO 25")
+    @Column(name = "nombre", nullable = true, length = 60)
     private String nombre;
 
     @ManyToOne
-    @JoinColumn(name="id_tipo_chat",foreignKey = @ForeignKey(name="fk_chat_tipo_chat"))
+    @JoinColumn(name = "id_tipo_chat", foreignKey = @ForeignKey(name = "fk_chat_tipo_chat"))
     private TipoChat tipoChat;
-    
+
     @JsonSerialize(using = ToStringSerializer.class)
     private LocalDateTime fechaCreacion;
-    
+
     @JsonIgnoreProperties(value = {"chat", "hibernateLazyInitializer", "handler"})
-    @OneToMany(mappedBy="chat",cascade=CascadeType.ALL,
-            fetch=FetchType.EAGER, orphanRemoval=true)
+    @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Mensaje> listaMensajes;
-    
+
+    public Chat() {
+        this.listaMensajes = new ArrayList<>();
+    }
+
     public Long getIdChat() {
         return idChat;
     }
@@ -81,13 +85,25 @@ public class Chat {
         return listaMensajes;
     }
 
+    //sera llamado para deserealizar
     public void setListaMensajes(List<Mensaje> listaMensajes) {
-        this.listaMensajes = listaMensajes;
+        this.listaMensajes.clear();
+        listaMensajes.forEach(this::addMensaje);
     }
 
-    
-    
-    
+    //METODOS PERSONALIZADOS
+    //se encarga de setear el valor correspondiente, y no hace falta programar en el service
+    public void addMensaje(Mensaje mensaje) {
+        mensaje.setChat(this);//falta probar si es al revez o no
+        this.listaMensajes.add(mensaje);
+
+    }
+
+    public void removeMensaje(Mensaje mensaje) {
+        this.listaMensajes.remove(mensaje);
+        mensaje.setChat(null);
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
@@ -112,10 +128,5 @@ public class Chat {
         }
         return true;
     }
-    
-    
-    
-    
-    
 
 }

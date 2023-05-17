@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 
 @Entity
@@ -27,7 +28,8 @@ public class ChatUsuario implements Serializable{
     private Usuario usuario;
     
     
-    @Column(name="scope_user")
+    @Size(min=4, max = 30, message = "EL NOMBRE DEL SCOPE DETE TENER COMO MIN 4 CARACTERES Y COMO MAX 30")
+    @Column(name="scope_user", length=30)
     private String scopeUser;
    
     @JsonSerialize(using=ToStringSerializer.class)

@@ -56,7 +56,4 @@ public class ChatUsuarioFK implements Serializable{
         return true;
     }
     
-    
-    
-    
 }

@@ -1,0 +1,38 @@
+{
+    "Chat": {
+        "nombre": "primerchat",
+        "fecha": "2020-12-12",
+        "tipoChat": {
+            "idTipoChat": 1
+        },
+        "listaMensajes": [
+            {
+                "usuario": {
+                    "idUsuario": 1
+                },
+                "texto": "hola",
+                "fecha": "123414412411"
+            },
+            {
+                "usuario": {
+                    "idUsuario": 2
+                },
+                "texto": "?",
+                "fecha": "123414412411"
+            }
+        ]
+    },
+
+    "listaChatUsuario": [
+       {
+            "usuario":{"idUsuario": 1},
+            "scopeUser": "admin",
+            "fechaUnion": "2022-12-11"
+        }, 
+        {
+            "usuario":{"idUsuario": 2},
+            "scopeUser": "invitado",
+            "fechaUnion": "2022-12-11"
+        }
+    ]
+}
