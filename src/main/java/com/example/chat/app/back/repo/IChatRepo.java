@@ -5,4 +5,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface IChatRepo extends JpaRepository<Chat, Long>{
     
-}
+} 

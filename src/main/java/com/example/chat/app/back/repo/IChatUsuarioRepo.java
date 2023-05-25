@@ -1,14 +1,17 @@
 package com.example.chat.app.back.repo;
 
 
+import com.example.chat.app.back.model.Chat;
 import com.example.chat.app.back.model.ChatUsuario;
 import com.example.chat.app.back.model.ChatUsuarioFK;
+import com.example.chat.app.back.model.Usuario;
 import java.time.LocalDateTime;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
+                                                                    //ChatUsuarioFK
 public interface IChatUsuarioRepo extends JpaRepository<ChatUsuario, ChatUsuarioFK>{
    
     
@@ -18,4 +21,13 @@ public interface IChatUsuarioRepo extends JpaRepository<ChatUsuario, ChatUsuario
             @Param("scopeUser")String scopeUser,
             @Param("id_chat")Long id_chat,
             @Param("id_user")Long id_user);
+    
+    @Query("SELECT cu.chat FROM ChatUsuario cu WHERE cu.usuario.idUsuario =:idUsuario")
+//    @Query(value="SELECT cu.chat FROM ChatUsuario cu JOIN FETCH cu.usuario u WHERE  u.idUsuario =:idUsuario")
+    List<Chat> listarChatDeUsuario(@Param("idUsuario") Long idUsuario);
+    
+    
+    @Query("SELECT cu.usuario FROM ChatUsuario cu WHERE cu.chat.idChat =:idChat")
+    List<Usuario> listarUsuariosDeChat(@Param("idChat") Long idChat);
+  
 }

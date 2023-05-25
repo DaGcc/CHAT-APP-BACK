@@ -4,11 +4,11 @@ import com.example.chat.app.back.model.Chat;
 import com.example.chat.app.back.model.ChatUsuario;
 import java.io.Serializable;
 import java.util.ArrayList;
-//import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 
 public class ChatDTO implements Serializable {
 
+//    @JsonIgnoreProperties(value = {"listaMensajes", "hibernateLazyInitializer", "handler"})
     private Chat chat;
 
     private List<ChatUsuario> listaChatUsuario;

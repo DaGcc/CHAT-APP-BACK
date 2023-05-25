@@ -31,6 +31,13 @@ public class Usuario implements Serializable {
     @Column(name = "rutaFoto", nullable = true)
     private String rutaFoto;
     
+    @Size(min=1,max=1, message="SOLO SE ACEPTA 1 CARACTER EN EL GENERO")
+    @Column(name = "genero",length=1, nullable = false)
+    private String genero;
+    
+    @Column(name="estado")
+    private boolean estado;
+    
     @NotNull
     @Email(message = "INGRESE UN CORREO ELECTRÓNICO VALIDO")
     @Size(min = 4, max = 120, message = "EL CORREO ELECTRONICO DEBE CONTENER COMO MINIMO 4 CARACTERES Y UN MAXIMO DE 120")
@@ -50,18 +57,7 @@ public class Usuario implements Serializable {
     public Usuario() {
     }
 
-    public Usuario(Long idUsuario, String username, String color, String rutaFoto, String email, String dni, String password) {
-        this.idUsuario = idUsuario;
-        this.username = username;
-        this.color = color;
-        this.rutaFoto = rutaFoto;
-        this.email = email;
-        this.dni = dni;
-        this.password = password;
-    }
 
-
-    
 
     /*METODOS GET Y SET*/
     public Long getIdUsuario() {
@@ -88,6 +84,24 @@ public class Usuario implements Serializable {
         this.color = color;
     }
 
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+
+  
+    
+    public String getGenero() {
+        return genero;
+    }
+
+    public void setGenero(String genero) {
+        this.genero = genero;
+    }
+    
     public String getEmail() {
         return email;
     }

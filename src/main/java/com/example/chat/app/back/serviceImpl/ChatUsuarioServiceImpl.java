@@ -1,6 +1,8 @@
 package com.example.chat.app.back.serviceImpl;
 
+import com.example.chat.app.back.model.Chat;
 import com.example.chat.app.back.model.ChatUsuario;
+import com.example.chat.app.back.model.Usuario;
 import com.example.chat.app.back.repo.IChatUsuarioRepo;
 import com.example.chat.app.back.service.IChatUsuarioService;
 import java.util.List;
@@ -16,7 +18,7 @@ public class ChatUsuarioServiceImpl implements IChatUsuarioService{
     
     @Override
     public List<ChatUsuario> leerTodos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.repo.findAll();
     }
 
     @Override
@@ -37,6 +39,16 @@ public class ChatUsuarioServiceImpl implements IChatUsuarioService{
     @Override
     public void eliminar(long idEntity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Chat> listarChatDeUsuario(Long idUsuario) {
+        return this.repo.listarChatDeUsuario(idUsuario);
+    }
+
+    @Override
+    public List<Usuario> listarUsuariosDeChat(Long idChat) {
+        return this.repo.listarUsuariosDeChat(idChat);
     }
   
 } 

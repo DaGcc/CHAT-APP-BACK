@@ -32,7 +32,10 @@ public class Chat {
     @Size(min = 3, max = 60, message = "EL NOMBRE DEL CHAT DEBE TENER COMO MINIMO 3 CARACTERES Y COMO MAXIMO 25")
     @Column(name = "nombre", nullable = true, length = 60)
     private String nombre;
-
+    
+    @Column(name = "ruta_img_chat", nullable = true)
+    private String rutaImgChat;
+    
     @ManyToOne
     @JoinColumn(name = "id_tipo_chat", foreignKey = @ForeignKey(name = "fk_chat_tipo_chat"))
     private TipoChat tipoChat;
@@ -71,6 +74,14 @@ public class Chat {
 
     public void setTipoChat(TipoChat tipoChat) {
         this.tipoChat = tipoChat;
+    }
+
+    public String getRutaImgChat() {
+        return rutaImgChat;
+    }
+
+    public void setRutaImgChat(String rutaImgChat) {
+        this.rutaImgChat = rutaImgChat;
     }
 
     public LocalDateTime getFechaCreacion() {

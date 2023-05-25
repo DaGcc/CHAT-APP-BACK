@@ -1,6 +1,7 @@
 package com.example.chat.app.back.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,31 +15,41 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
-
 @Entity
-@Table(name="mensaje")
-public class Mensaje {
-    
+@Table(name = "mensaje")
+public class Mensaje implements Serializable{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idMensaje;
-    
-    @ManyToOne(fetch= FetchType.LAZY)
-    @JoinColumn(name="id_usuario",foreignKey = @ForeignKey(name="fk_mensaje_usuario"))
-    private Usuario usuario;
-    
-    @Size(min = 0, max = 100)
-    @Column(name = "texto", nullable = false, length = 100)
-    private String texto;
-       
-    @ManyToOne(fetch= FetchType.LAZY)
-    @JsonIgnoreProperties(value={"listaMensajes","hibernateLazyInitializer", "handler"})
-    @JoinColumn(name="id_chat")
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = {"listaMensajes", "hibernateLazyInitializer", "handler"})
+    @JoinColumn(name = "id_chat")
     private Chat chat;
+
     
-    @Column(name="fecha")//?
+    @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario", foreignKey = @ForeignKey(name = "fk_mensaje_usuario"))
+    private Usuario usuario;
+
+    @Size(min = 0, max = 255)
+    @Column(name = "texto", nullable = false, length = 255)
+    private String texto;
+
+    @Column(name = "tipo",length = 20)
+    private String tipo;
+    
+    @Column(name = "fecha")
     private Long fecha;
 
+    
+    
+    public Mensaje() {
+    }
+    
+    
     public Long getIdMensaje() {
         return idMensaje;
     }
@@ -71,6 +82,15 @@ public class Mensaje {
         this.chat = chat;
     }
 
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    
     public Long getFecha() {
         return fecha;
     }
@@ -104,8 +124,4 @@ public class Mensaje {
         return true;
     }
 
-    
-    
-
-    
 }

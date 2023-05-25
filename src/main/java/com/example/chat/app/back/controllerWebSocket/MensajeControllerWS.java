@@ -4,47 +4,57 @@
  */
 package com.example.chat.app.back.controllerWebSocket;
 
+import com.example.chat.app.back.DTO.NotificacionUser;
 import com.example.chat.app.back.model.Mensaje;
+import com.example.chat.app.back.service.IMensajeService;
 import java.util.Date;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
-/**
- *
- * @author gutie
- */
+/*
+M: MENSAJE
+N: NUEVO USUARIO
+*/
+
 @Controller
 public class MensajeControllerWS {
     
     @Autowired
-    private  SimpMessagingTemplate webSocket;
+    private IMensajeService service;
     
-    //res api -> pides y te da
-    //websocket -> mandas , te da en base subcrito
+    @Autowired
+    private  SimpMessagingTemplate webSocket;
+  
     @MessageMapping("/mensaje") //<-cliente angular
-    @SendTo("/chat/mensaje") // -> subsc.
-    public Mensaje recibirMensaje(Mensaje mensaje) {
-//        mensaje.setFecha(new Date().getTime());
-//        if (mensaje.getTipo().equals("NUEVO_USUARIO")) {
-//            mensaje.setTexto("nuevo usuario");
-//        }
-        return mensaje;
+//    @SendTo("/chat/mensaje") // -> subsc.
+    public void recibirMensaje(Mensaje mensaje) {
+        mensaje.setFecha(new Date().getTime());
+        if (mensaje.getTipo().equals("N")) {//falta ver la logica ...
+//            mensaje.setTexto(mensaje.getUsuario().getUsername()+" AÑADIO A "+);
+        }
+        mensaje = this.service.crear(mensaje);
+        System.out.println(mensaje.getChat().getIdChat());
+        webSocket.convertAndSend("/chat/mensaje/"+mensaje.getChat().getIdChat(), mensaje);
     }
-    @MessageMapping("/escribiendo")
-    @SendTo("/chat/escribiendo")//el sentTo envia al mentodo /chat/mensaje lo que se retorna aqui
-    public String estaEscribiendo(String username) {
-        return username + " está escribiendo....";
-    }
-
-//    @MessageMapping("/historial")
-////    @SendTo("/chat/historial")
-//    public void recibirLosUltimos10Mensajes(String clienteId) {
-//        List<Mensaje> mensajes = service.obtenerUltimos10Mnesaje();
-//        System.out.println(mensajes.size()); 
-//        webSocket.convertAndSend("/chat/historial/"+clienteId, mensajes); 
-//    }
+    
+    
+    /*
+    N: NUEVO_MENSAJE
+    E: ESCRIBIENDO
+    */
+    @MessageMapping("/notificar")
+    public void estaEscribiendo(NotificacionUser notificaciones) {
+        String n;
+        if(notificaciones.getTipo().equals("E")){
+             n = notificaciones.getUsuario().getUsername() + " está escribiendo....";
+        }else if(notificaciones.getTipo().equals("N")){
+             n = "N";
+        }else{
+             n = "";
+        }
+        webSocket.convertAndSend("/chat/notificar/"+notificaciones.getChat().getIdChat(), n);
+    }  
 }
+    
